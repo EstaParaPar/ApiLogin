@@ -1,21 +1,21 @@
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
-import { Machine } from '../entity/Machine';
+import { StudiesType } from '../entity/StudiesType';
 import { validate } from 'class-validator';
 
-export class MachineController {
+export class StudiesTypeController{
   static getAll = async (req: Request, res: Response) => {
-    const machineRepository = getRepository(Machine);
-    let machines;
+    const studiesRepository = getRepository(StudiesType);
+    let studies;
 
     try {
-      machines = await machineRepository.find({select: ['id', 'name']});
+      studies = await studiesRepository.find({select: ['id', 'name', 'price']});
     } catch (e) {
       res.status(404).json({message: 'Somenthing goes wrong!'});
     }
 
-    if (machines.length > 0) {
-      res.send(machines);
+    if (studies.length > 0) {
+      res.send(studies);
     } else {
       res.status(404).json({message: 'Not result'});
     }
@@ -23,4 +23,4 @@ export class MachineController {
 }
 
 
-export default MachineController;
+export default StudiesTypeController;
