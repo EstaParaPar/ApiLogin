@@ -13,6 +13,10 @@ export class Machine {
     name: string;
 
     @Column()
+    @IsNotEmpty()
+    enable: boolean;
+
+    @Column()
     @CreateDateColumn()
     createAT: Date;
 

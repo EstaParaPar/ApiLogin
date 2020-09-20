@@ -38,6 +38,10 @@ export class studies {
     state: number;
 
     @Column()
+    @Column("double")
+    currentPrice: number;
+
+    @Column()
     @CreateDateColumn()
     createAT: Date;
 
