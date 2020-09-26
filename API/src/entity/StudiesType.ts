@@ -1,5 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from "typeorm";
-import {MinLength, IsNotEmpty} from "class-validator";
+import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import {MinLength, IsNotEmpty} from 'class-validator';
 
 @Entity()
 export class StudiesType {
@@ -14,7 +14,7 @@ export class StudiesType {
 
     @Column()
     @IsNotEmpty()
-    @Column("double")
+    @Column('double')
     price: number;
 
     @Column()

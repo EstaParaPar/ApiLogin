@@ -1,5 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn,ManyToOne,JoinColumn} from "typeorm";
-import {Users} from "./Users";
+import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn} from 'typeorm';
+import {Users} from './Users';
 
 @Entity()
 export class PayOut {

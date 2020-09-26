@@ -1,14 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn,ManyToOne,JoinColumn} from "typeorm";
-import {Users} from "./Users";
-import {StudiesType} from "./StudiesType";
-import {Machine} from "./Machine";
-import {PayOut} from "./PayOut";
+import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn} from 'typeorm';
+import {Users} from './Users';
+import {StudiesType} from './StudiesType';
+import {Machine} from './Machine';
+import {PayOut} from './PayOut';
 
 
 
 @Entity()
 
-export class studies {
+export class Studies {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -38,7 +38,7 @@ export class studies {
     state: number;
 
     @Column()
-    @Column("double")
+    @Column('double')
     currentPrice: number;
 
     @Column()

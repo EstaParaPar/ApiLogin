@@ -1,5 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from "typeorm";
-import {MinLength, IsNotEmpty} from "class-validator";
+import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import {MinLength, IsNotEmpty} from 'class-validator';
 
 @Entity()
 export class Machine {
