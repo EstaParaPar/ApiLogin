@@ -27,10 +27,10 @@ class AuthController {
       return res.status(400).json({ message: 'Username or Password are incorrect!' });
     }
 
-    const token = jwt.sign({ userId: user.id, username: user.username }, config.jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id, username: user.username}, config.jwtSecret, { expiresIn: '1h' });
 
-    res.json({ message: 'OK', token, userId: user.id, role: user.role });
-  };
+    res.json({ message: 'OK', token, userId: user.id, name: user.name, lastname: user.lastname,  role: user.role });
+  }
 
   static changePassword = async (req: Request, res: Response) => {
     const { userId } = res.locals.jwtPayload;
@@ -66,6 +66,6 @@ class AuthController {
     userRepository.save(user);
 
     res.json({ message: 'Password change!' });
-  };
+  }
 }
 export default AuthController;
