@@ -4,7 +4,7 @@ import {StudiesType} from './StudiesType';
 import {Machine} from './Machine';
 import { PayOut } from './PayOut';
 import { Patients } from './Patients';
-import {HealthInsurance}from './HealthInsurance'
+import { HealthInsurance } from './HealthInsurance';
 
 
 @Entity()
@@ -60,6 +60,4 @@ export class Studies {
     @ManyToOne(type => HealthInsurance)
     @JoinColumn()
     idHealthInsurance: HealthInsurance;
-
-
 }
