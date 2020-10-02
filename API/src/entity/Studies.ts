@@ -2,8 +2,9 @@ import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, Update
 import {Users} from './Users';
 import {StudiesType} from './StudiesType';
 import {Machine} from './Machine';
-import {PayOut} from './PayOut';
-
+import { PayOut } from './PayOut';
+import { Patients } from './Patients';
+import {HealthInsurance}from './HealthInsurance'
 
 
 @Entity()
@@ -42,12 +43,23 @@ export class Studies {
     currentPrice: number;
 
     @Column()
+    studyDate: Date;
+
+    @Column()
     @CreateDateColumn()
     createAT: Date;
 
     @Column()
     @UpdateDateColumn()
     uptadeAT: Date;
+    
+    @ManyToOne(type => Patients)
+    @JoinColumn()
+    idPatients: Patients;
+
+    @ManyToOne(type => HealthInsurance)
+    @JoinColumn()
+    idHealthInsurance: HealthInsurance;
 
 
 }

@@ -6,7 +6,7 @@ import { Router } from 'express';
 const router = Router();
 
 // Get all Machines
-router.get('/', MachineController.getAll);
+router.get('/',[checkJwt, checkRole(['Admin',])], MachineController.getAll);
 
 // Get one Machine
 
