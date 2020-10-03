@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from 'typeorm';
-import {MinLength, IsNotEmpty} from 'class-validator';
+import {IsNotEmpty} from 'class-validator';
 
 @Entity()
 export class HealthInsurance {
@@ -8,7 +8,6 @@ export class HealthInsurance {
     id: number;
 
     @Column()
-    @MinLength(8)
     @IsNotEmpty()
     name: string;
 
