@@ -7,11 +7,11 @@ import { Router } from 'express';
 const router = Router();
 
 // Get all studies type
-router.get('/',[checkJwt, checkRole(['Admin',])], StudiesTypeController.getAll);
+router.get('/',[checkJwt, checkRole(['Admin','Doctor'])], StudiesTypeController.getAll);
 
 // Get one studies type
 // Get one user
-router.get('/:id',[checkJwt, checkRole(['Admin',])], StudiesTypeController.getById);
+router.get('/:id',[checkJwt, checkRole(['Admin','Doctor'])], StudiesTypeController.getById);
 
 // Create a new studies type
 

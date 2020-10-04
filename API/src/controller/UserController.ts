@@ -20,6 +20,28 @@ export class UserController {
       res.status(404).json({ message: 'Not result' });
     }
   };
+  static getDoctors = async (req: Request, res: Response) => {
+    const userRepository = getRepository(Users);
+    let users;
+
+    try {
+      users = await userRepository.find({
+        select: ['id', 'username','password' ,'role','name','lastname'],
+        where: {
+          role: 'Doctor'
+        }
+     });
+
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+
+    if (users.length > 0) {
+      res.send(users);
+    } else {
+      res.status(404).json({ message: 'Not result' });
+    }
+  };
 
   static getById = async (req: Request, res: Response) => {
     const { id } = req.params;

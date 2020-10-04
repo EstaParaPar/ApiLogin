@@ -13,7 +13,7 @@ router.get('/',HealthInsuranceController.getAll);
 // Create a new HealthInsurance
 
 // Create a new user
-router.post('/',[checkJwt, checkRole(['Admin'])],  HealthInsuranceController.new);
+router.post('/',[checkJwt, checkRole(['Admin','Doctor'])],  HealthInsuranceController.new);
 
 // Edit HealthInsurance
 
