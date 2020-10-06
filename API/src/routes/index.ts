@@ -6,6 +6,7 @@ import patients from './patients';
 import machine from './machine';
 import studiestype from './studiestype';
 import healthinsurance from './healthinsurance';
+import studiesTech from './studiesTech';
 const routes = Router();
 
 routes.use('/auth', auth);
@@ -15,6 +16,7 @@ routes.use('/machine', machine);
 routes.use('/patients', patients);
 routes.use('/studiesType', studiestype);
 routes.use('/healthInsurance', healthinsurance);
+routes.use('/studiesTech', studiesTech);
 
 export default routes;
 
