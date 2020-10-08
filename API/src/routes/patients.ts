@@ -13,7 +13,7 @@ router.get('/',PatientsController.getAll);
 // Create a new Patients
 
 // Create a new Patients
-router.post('/',[checkJwt, checkRole(['Admin','Doctor'])],  PatientsController.new);
+router.post('/',[checkJwt, checkRole(['Admin','Doctor', 'Tecnico'])],  PatientsController.new);
 
 // Edit Patients
 

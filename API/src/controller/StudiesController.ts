@@ -28,7 +28,7 @@ export class StudiesController {
   }
 
   static new = async (req: Request, res: Response) => {
-    const { study, machine,doctor, name, dni , lastname, newPatient,newHealth ,patient, healthinsurance, date} = req.body;
+    const { study, machine, doctor, name, dni, lastname, newPatient, newHealth, patient, healthinsurance, date } = req.body;
     const studysave = new Studies();
     const patients = new Patients();
     const healthinsurances = new HealthInsurance();
@@ -56,17 +56,17 @@ export class StudiesController {
       if (newSavePatient == null) {
         await patientRepository.save(patients);
       
-      newSavePatient = await patientRepository.findOne({
-        select: ['id'],
-        where: {
-          dni: patients.dni
-        }
-      });
+        newSavePatient = await patientRepository.findOne({
+          select: ['id'],
+          where: {
+            dni: patients.dni
+          }
+        });
       }
       idPatients = newSavePatient.id;
 
     } else {
-      idPatients=patient
+      idPatients = patient
     }
     console.log(idPatients);
 
@@ -93,7 +93,7 @@ export class StudiesController {
       idHealthInsurance = newSaveHealth.id;
 
     } else {
-      idHealthInsurance=healthinsurance
+      idHealthInsurance = healthinsurance
     }
 
     
@@ -109,12 +109,53 @@ export class StudiesController {
     const StudiesRepository = getRepository(Studies);
     try {
       await StudiesRepository.save(studysave);
+ 
     } catch (e) {
       return res.status(409).json({ message: e });
     }
+    
     // All ok
-    res.send('Estudio agregado');
+    res.send(studysave);
   };
+  static getById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let studies;
+  
+    try {
+  
+  
+  
+      studies = await getRepository(Studies)
+        .createQueryBuilder('studies')
+        .innerJoinAndSelect('studies.doctor', 'doctorData')
+        .innerJoinAndSelect('studies.technician', 'technicianData')
+        .innerJoinAndSelect('studies.studieType', 'sTypeData')
+        .innerJoinAndSelect('studies.machine', 'machineData')
+        .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+        .innerJoinAndSelect('studies.idPatients', 'patientsData')
+        .select(['studies',
+          'doctorData.name','doctorData.lastname',
+          'technicianData.name','technicianData.lastname',
+          'sTypeData.name','sTypeData.id',
+          'machineData.name',
+          'hInsuranceData.name',
+          'patientsData.name', 'patientsData.lastname',
+          'patientsData.dni'
+        ])
+        .where('studies.id = :id', { id })
+        .getOne();
+  
+  
+  } catch (e) {
+  res.status(404).json({message: 'Somenthing goes wrong!'});
+  }
+  
+  if (studies.length > 0) {
+  res.send({studies});
+  } else {
+  res.status(404).json({message: 'Not result'});
+  }
+  }
 }
 
 
