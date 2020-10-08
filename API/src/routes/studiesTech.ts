@@ -1,13 +1,13 @@
 import { checkRole } from './../middlewares/role';
 import { checkJwt } from './../middlewares/jwt';
-import { StudiesTecnicoController } from './../controller/StudiesTecnicoController';
+import { StudiesListController } from '../controller/StudiesListController';
 import { Router } from 'express';
 
 
 const router = Router();
 
 // Get all studies type
-router.get('/:id', StudiesTecnicoController.getAll);
+router.get('/:id', StudiesListController.getStudiesTecnico);
 
 // Get one
 

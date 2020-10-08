@@ -1,24 +1,24 @@
-import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn, Unique} from 'typeorm';
 import {MinLength, IsNotEmpty} from 'class-validator';
 
 @Entity()
+@Unique(['dni'])
 export class Patients {
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    @MinLength(8)
     @IsNotEmpty()
     name: string;
 
     @Column()
-    @MinLength(8)
     @IsNotEmpty()
     lastname: string;
 
     @Column()
     @MinLength(8)
+    
     @IsNotEmpty()
     dni: number;
 

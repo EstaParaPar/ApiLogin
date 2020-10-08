@@ -8,7 +8,6 @@ export class StudiesType {
     id: number;
 
     @Column()
-    @MinLength(8)
     @IsNotEmpty()
     name: string;
 

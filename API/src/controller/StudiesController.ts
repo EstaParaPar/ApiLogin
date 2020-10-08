@@ -4,6 +4,7 @@ import { Studies } from '../entity/Studies';
 import { validate } from 'class-validator';
 import { Patients } from '../entity/Patients';
 import { StudiesType } from '../entity/StudiesType';
+import { HealthInsurance } from '../entity/HealthInsurance';
 
 
 export class StudiesController {
@@ -27,12 +28,16 @@ export class StudiesController {
   }
 
   static new = async (req: Request, res: Response) => {
-    const { study, machine,doctor, name, dni , lastname, newPatient,patient,healthinsurance, date} = req.body;
+    const { study, machine,doctor, name, dni , lastname, newPatient,newHealth ,patient, healthinsurance, date} = req.body;
     const studysave = new Studies();
     const patients = new Patients();
+    const healthinsurances = new HealthInsurance();
+    let newHealthIns = 0;
     let newPatients = 0;
     let newSavePatient;
     let idPatients;
+    let newSaveHealth;
+    let idHealthInsurance;
 
     const patientRepository = getRepository(Patients);
     newPatients = newPatient;
@@ -40,18 +45,31 @@ export class StudiesController {
       patients.name = name;
       patients.dni = dni;
       patients.lastname = lastname;
-      await patientRepository.save(patients);
-      newSavePatient = await patientRepository.find({
+      newSavePatient = await patientRepository.findOne({
         select: ['id'],
         where: {
           dni: patients.dni
         }
       });
+      console.log(newSavePatient);
+
+      if (newSavePatient == null) {
+        await patientRepository.save(patients);
+      
+      newSavePatient = await patientRepository.findOne({
+        select: ['id'],
+        where: {
+          dni: patients.dni
+        }
+      });
+      }
       idPatients = newSavePatient.id;
 
     } else {
       idPatients=patient
     }
+    console.log(idPatients);
+
     const StudieTypeRepository = getRepository(StudiesType)
     let studyPrice = await StudieTypeRepository.findOne({
       select: ['price'],
@@ -59,7 +77,24 @@ export class StudiesController {
         id: study
       }
     });
-    
+
+
+    const healthInsuranceRepository = getRepository(HealthInsurance);
+    newHealthIns = newHealth;
+    if (newHealthIns == 1) {
+      healthinsurances.name = healthinsurance;
+      await healthInsuranceRepository.save(healthinsurances);
+      newSaveHealth = await healthInsuranceRepository.findOne({
+        select: ['id'],
+        where: {
+          name: healthinsurances.name
+        }
+      });
+      idHealthInsurance = newSaveHealth.id;
+
+    } else {
+      idHealthInsurance=healthinsurance
+    }
 
     
     studysave.doctor = doctor;
@@ -68,7 +103,7 @@ export class StudiesController {
     studysave.idPatients = idPatients;
     studysave.state = 1;
     studysave.currentPrice = studyPrice.price;
-    studysave.idHealthInsurance = healthinsurance;
+    studysave.idHealthInsurance = idHealthInsurance;
     studysave.studyDate = date;
     
     const StudiesRepository = getRepository(Studies);
