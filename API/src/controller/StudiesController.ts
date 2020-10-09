@@ -5,6 +5,7 @@ import { validate } from 'class-validator';
 import { Patients } from '../entity/Patients';
 import { StudiesType } from '../entity/StudiesType';
 import { HealthInsurance } from '../entity/HealthInsurance';
+import { Users } from '../entity/Users';
 
 
 export class StudiesController {
@@ -28,7 +29,7 @@ export class StudiesController {
   }
 
   static new = async (req: Request, res: Response) => {
-    const { study, machine, doctor, name, dni, lastname, newPatient, newHealth, patient, healthinsurance, date } = req.body;
+    const { study, machine, doctor, name, dni, lastname, newPatient, newHealth, patient, healthinsurance, date, technician } = req.body;
     const studysave = new Studies();
     const patients = new Patients();
     const healthinsurances = new HealthInsurance();
@@ -38,6 +39,7 @@ export class StudiesController {
     let idPatients;
     let newSaveHealth;
     let idHealthInsurance;
+    let idTech;
 
     const patientRepository = getRepository(Patients);
     newPatients = newPatient;
@@ -78,6 +80,15 @@ export class StudiesController {
       }
     });
 
+    const userRepository = getRepository(Users);
+    let tech = await userRepository.findOne({
+      select: ['id'],
+      where: {
+        username: technician
+      }
+    });
+    idTech = tech.id;
+
 
     const healthInsuranceRepository = getRepository(HealthInsurance);
     newHealthIns = newHealth;
@@ -96,7 +107,7 @@ export class StudiesController {
       idHealthInsurance = healthinsurance
     }
 
-    
+    studysave.technician = idTech;
     studysave.doctor = doctor;
     studysave.studieType = study;
     studysave.machine = machine;
@@ -150,11 +161,9 @@ export class StudiesController {
   res.status(404).json({message: 'Somenthing goes wrong!'});
   }
   
-  if (studies.length > 0) {
-  res.send({studies});
-  } else {
-  res.status(404).json({message: 'Not result'});
-  }
+
+  res.send(studies);
+
   }
 }
 

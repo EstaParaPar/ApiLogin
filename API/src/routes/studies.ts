@@ -9,6 +9,6 @@ router.post('/', [checkJwt, checkRole(['Admin', 'Doctor', 'Tecnico'])], StudiesC
 
 // get last study
 
-router.get('/:id', [checkJwt, checkRole(['Admin', 'Doctor', 'Tecnico'])], StudiesController.getById);
+router.get('/:id',  StudiesController.getById);
 
 export default router;
