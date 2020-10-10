@@ -145,27 +145,73 @@ export class StudiesController {
         .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
         .innerJoinAndSelect('studies.idPatients', 'patientsData')
         .select(['studies',
-          'doctorData.name','doctorData.lastname',
-          'technicianData.name','technicianData.lastname',
-          'sTypeData.name','sTypeData.id',
-          'machineData.name',
-          'hInsuranceData.name',
-          'patientsData.name', 'patientsData.lastname',
+          'doctorData.name', 'doctorData.lastname','doctorData.id',
+          'technicianData.name', 'technicianData.lastname',
+          'sTypeData.name', 'sTypeData.id',
+          'machineData.name','machineData.id',
+          'hInsuranceData.name','hInsuranceData.id',
+          'patientsData.name', 'patientsData.lastname','patientsData.id',
           'patientsData.dni'
         ])
         .where('studies.id = :id', { id })
         .getOne();
   
   
-  } catch (e) {
-  res.status(404).json({message: 'Somenthing goes wrong!'});
-  }
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
   
 
-  res.send(studies);
+    res.send(studies);
 
-  }
+  };
+  static confirmStudy = async (req: Request, res: Response) => {
+    let study;
+    const { id } = req.params;
+
+    const studiesRepository = getRepository(Studies);
+    // Try get user
+    try {
+      study = await studiesRepository.findOneOrFail(id);
+
+    } catch (e) {
+      return res.status(404).json({ message: 'Study not found' });
+    }
+    // Try to save user
+    try {
+      study.state = 2;
+      await studiesRepository.save(study);
+    } catch (e) {
+      return res.status(409).json({ message: 'Study already in use' });
+    }
+
+    res.status(201).json({ message: 'Study update' });
+  };
+
+  static deleteStudy = async (req: Request, res: Response) => {
+    let study;
+    const { id } = req.params;
+
+    const studiesRepository = getRepository(Studies);
+    // Try get user
+    try {
+      study = await studiesRepository.findOneOrFail(id);
+
+    } catch (e) {
+      return res.status(404).json({ message: 'Study not found' });
+    }
+    // Try to save user
+    try {
+      study.state = 4;
+      await studiesRepository.save(study);
+    } catch (e) {
+      return res.status(409).json({ message: 'Study already in use' });
+    }
+
+    res.status(201).json({ message: 'Study update' });
+  };
 }
+
 
 
 export default StudiesController;

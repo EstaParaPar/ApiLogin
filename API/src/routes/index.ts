@@ -7,7 +7,10 @@ import machine from './machine';
 import studiestype from './studiestype';
 import healthinsurance from './healthinsurance';
 import studiesTech from './studiesTech';
-import studies from './studies'
+import studies from './studies';
+import deleteStudy from './deleteStudy';
+import confirmStudy from './confirmStudy';
+
 
 const routes = Router();
 
@@ -20,5 +23,7 @@ routes.use('/studiesType', studiestype);
 routes.use('/healthInsurance', healthinsurance);
 routes.use('/studiesTech', studiesTech);
 routes.use('/studies', studies);
+routes.use('/deleteStudy', deleteStudy);
+routes.use('/confirmStudy', confirmStudy);
 export default routes;
 
