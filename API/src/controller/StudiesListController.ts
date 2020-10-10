@@ -39,7 +39,7 @@ res.status(404).json({message: 'Somenthing goes wrong!'});
 }
 
 if (studies.length > 0) {
-res.send({studies});
+res.send(studies);
 } else {
 res.status(404).json({message: 'Not result'});
 }
