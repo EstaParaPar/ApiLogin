@@ -10,6 +10,7 @@ import studiesTech from './studiesTech';
 import studies from './studies';
 import deleteStudy from './deleteStudy';
 import confirmStudy from './confirmStudy';
+import dashTeach from './dashboardTech';
 
 
 const routes = Router();
@@ -25,5 +26,6 @@ routes.use('/studiesTech', studiesTech);
 routes.use('/studies', studies);
 routes.use('/deleteStudy', deleteStudy);
 routes.use('/confirmStudy', confirmStudy);
+routes.use('/dashTech', dashTeach);
 export default routes;
 
