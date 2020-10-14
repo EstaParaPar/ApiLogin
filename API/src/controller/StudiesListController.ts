@@ -85,15 +85,48 @@ res.send({studies});
 res.status(404).json({message: 'Not result'});
 }
   }
+
+  static getStudiesByDoctorAndTech = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let studies;
+    const {idTech}= req.body;
+    try {
+      studies = await getRepository(Studies)
+        .createQueryBuilder('studies')
+        .innerJoinAndSelect('studies.doctor', 'doctorData')
+        .innerJoinAndSelect('studies.technician', 'technicianData')
+        .innerJoinAndSelect('studies.studieType', 'sTypeData')
+        .innerJoinAndSelect('studies.machine', 'machineData')
+        .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+        .innerJoinAndSelect('studies.idPatients', 'patientsData')
+        .select(['studies',
+          'doctorData.name','doctorData.lastname',
+          'technicianData.name','technicianData.lastname','technicianData.id',
+          'sTypeData.name','sTypeData.id',
+          'machineData.name',
+          'hInsuranceData.name',
+          'patientsData.name', 'patientsData.lastname',
+          'patientsData.dni'
+        ])
+        .where('studies.doctor = :id', { id })
+        .where('studies.techinician = :idTech', { idTech })
+        .where('studies.state=2')
+        .getMany();
   
+  
+  } catch (e) {
+  res.status(404).json({message: 'Somenthing goes wrong!'});
+  }
+  
+  res.send(studies);
+  
+  }
+
 static getStudiesByPayout = async (req: Request, res: Response) => {
   const { id } = req.params;
   let studies;
 
   try {
-
-
-
     studies = await getRepository(Studies)
       .createQueryBuilder('studies')
       .innerJoinAndSelect('studies.doctor', 'doctorData')
@@ -103,7 +136,7 @@ static getStudiesByPayout = async (req: Request, res: Response) => {
       .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
       .innerJoinAndSelect('studies.idPatients', 'patientsData')
       .select(['studies',
-        'doctorData.name','doctorData.lastname',
+        'doctorData.name','doctorData.lastname','doctorData.lastname',
         'technicianData.name','technicianData.lastname',
         'sTypeData.name','sTypeData.id',
         'machineData.name',
@@ -118,12 +151,8 @@ static getStudiesByPayout = async (req: Request, res: Response) => {
 } catch (e) {
 res.status(404).json({message: 'Somenthing goes wrong!'});
 }
+res.send(studies);
 
-if (studies.length > 0) {
-res.send({studies});
-} else {
-res.status(404).json({message: 'Not result'});
-}
 }
 }
 export default StudiesListController

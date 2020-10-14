@@ -136,9 +136,6 @@ export class StudiesController {
     let studies;
 
     try {
-
-
-
       studies = await getRepository(Studies)
         .createQueryBuilder('studies')
         .innerJoinAndSelect('studies.doctor', 'doctorData')

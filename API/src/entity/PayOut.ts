@@ -19,4 +19,12 @@ export class PayOut {
     @JoinColumn()
     doctor: Users;
 
+    @ManyToOne(type => Users)
+    @JoinColumn()
+    technician: Users;
+
+    @Column()
+    @Column('double')
+    totalPrice: Number;
+
 }
