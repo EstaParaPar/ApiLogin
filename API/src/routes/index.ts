@@ -14,7 +14,7 @@ import dashTeach from './dashboardTech';
 import studiesdoctortech from './studiesdoctortech';
 import techs from './techs';
 import confirmPayout from './confirmedStudiesPayout';
-
+import dashDoctor from './dashboardDoctor';
 
 
 const routes = Router();
@@ -32,6 +32,7 @@ routes.use('/studies', studies);
 routes.use('/deleteStudy', deleteStudy);
 routes.use('/confirmStudy', confirmStudy);
 routes.use('/dashTech', dashTeach);
+routes.use('/dashDoctor', dashDoctor);
 routes.use('/studiesdoctortech', studiesdoctortech );
 routes.use('/confirmedStudiesPayout', confirmPayout);
 
