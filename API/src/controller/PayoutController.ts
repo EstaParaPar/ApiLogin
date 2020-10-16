@@ -28,9 +28,6 @@ export class PayoutController {
           }
         });*/
 
-
-  
-
         payoutsave.technician = idTech;
         payoutsave.doctor = doctorId;
         payoutsave.totalPrice = Total;
@@ -55,9 +52,88 @@ export class PayoutController {
     
         // All ok
         res.send(payoutsave);
-      };
+  };
+
+  static getListPayoutByDoctor = async (req: Request, res: Response) => {
+    console.log(req.params);
+    const { id } = req.params;
+    let payout;
+    try {
+      payout = await getRepository(PayOut)
+        .createQueryBuilder('payout')
+        .innerJoinAndSelect('payout.doctor', 'doctorData')
+        .innerJoinAndSelect('payout.technician', 'technicianData')
+        .select(['payout',
+          'doctorData.name', 'doctorData.lastname','doctorData.lastname',
+          'payout.createAT',
+          'technicianData.name', 'technicianData.lastname','technicianData.id',
+          'payout.totalPrice'
+        ])
+        .where('payout.doctor = :id', { id })
+        .getMany();
+      
+      
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+            
+    res.send(payout);
+    
+          
+  };
+
+  static getDetailPayout = async (req: Request, res: Response) => {
+    console.log(req.params);
+    const { id } = req.params;
+    let payout;
+    let studies;
+
+    try {
+      payout = await getRepository(PayOut)
+      .createQueryBuilder('payout')
+      .innerJoinAndSelect('payout.doctor', 'doctorData')
+      .innerJoinAndSelect('payout.technician', 'technicianData')
+      .select(['payout',
+        'doctorData.name', 'doctorData.lastname','doctorData.id',
+        'technicianData.name', 'technicianData.lastname','technicianData.id',
+        'payout.totalPrice'
+      ])
+      .where('payout.id = :id', { id })
+        .getOne();
+
+      studies = await getRepository(Studies)
+      .createQueryBuilder('studies')
+      .innerJoinAndSelect('studies.doctor', 'doctorData')
+      .innerJoinAndSelect('studies.technician', 'technicianData')
+      .innerJoinAndSelect('studies.studieType', 'sTypeData')
+      .innerJoinAndSelect('studies.machine', 'machineData')
+      .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+      .innerJoinAndSelect('studies.idPatients', 'patientsData')
+      .select(['studies',
+        'doctorData.name','doctorData.lastname',
+        'technicianData.name','technicianData.lastname',
+        'sTypeData.name','sTypeData.id',
+        'machineData.name',
+        'hInsuranceData.name',
+        'patientsData.name', 'patientsData.lastname',
+        'patientsData.dni'
+      ])
+      .where('studies.payOutId = :id', { id })
+      .getMany();
+      
+
+      
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+            
+    res.send({ payout, studies });
+    
+          
+  };
+
+} 
 
 
-}
 
 export default PayoutController;
