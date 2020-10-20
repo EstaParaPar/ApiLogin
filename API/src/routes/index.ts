@@ -16,6 +16,7 @@ import techs from './techs';
 import confirmPayout from './confirmedStudiesPayout';
 import dashDoctor from './dashboardDoctor';
 import detailPayout from './detailPayout';
+import studiesdoctor from './studiesdoctor';
 
 
 const routes = Router();
@@ -37,7 +38,7 @@ routes.use('/dashDoctor', dashDoctor);
 routes.use('/studiesdoctortech', studiesdoctortech );
 routes.use('/confirmedStudiesPayout', confirmPayout);
 routes.use('/detailPayout', detailPayout);
-
+routes.use('/studiesdoctor', studiesdoctor);
 
 export default routes;
 

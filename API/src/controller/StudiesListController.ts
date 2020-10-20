@@ -22,9 +22,9 @@ export class StudiesListController {
         .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
         .innerJoinAndSelect('studies.idPatients', 'patientsData')
         .select(['studies',
-          'doctorData.name','doctorData.lastname',
-          'technicianData.name','technicianData.lastname',
-          'sTypeData.name','sTypeData.id',
+          'doctorData.name', 'doctorData.lastname',
+          'technicianData.name', 'technicianData.lastname',
+          'sTypeData.name', 'sTypeData.id',
           'machineData.name',
           'hInsuranceData.name',
           'patientsData.name', 'patientsData.lastname',
@@ -34,62 +34,62 @@ export class StudiesListController {
         .getMany();
 
 
-} catch (e) {
-res.status(404).json({message: 'Somenthing goes wrong!'});
-}
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
 
-if (studies.length > 0) {
-res.send(studies);
-} else {
-res.status(404).json({message: 'Not result'});
-}
+    if (studies.length > 0) {
+      res.send(studies);
+    } else {
+      res.status(404).json({ message: 'Not result' });
+    }
   }
   
 
-static getStudiesByDoctor = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  let studies;
+  static getStudiesByDoctor = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let studies;
 
-  try {
-
-
-
-    studies = await getRepository(Studies)
-      .createQueryBuilder('studies')
-      .innerJoinAndSelect('studies.doctor', 'doctorData')
-      .innerJoinAndSelect('studies.technician', 'technicianData')
-      .innerJoinAndSelect('studies.studieType', 'sTypeData')
-      .innerJoinAndSelect('studies.machine', 'machineData')
-      .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
-      .innerJoinAndSelect('studies.idPatients', 'patientsData')
-      .select(['studies',
-        'doctorData.name','doctorData.lastname',
-        'technicianData.name','technicianData.lastname',
-        'sTypeData.name','sTypeData.id',
-        'machineData.name',
-        'hInsuranceData.name',
-        'patientsData.name', 'patientsData.lastname',
-        'patientsData.dni'
-      ])
-      .where('studies.doctor = :id', { id })
-      .getMany();
+    try {
 
 
-} catch (e) {
-res.status(404).json({message: 'Somenthing goes wrong!'});
-}
 
-if (studies.length > 0) {
-res.send({studies});
-} else {
-res.status(404).json({message: 'Not result'});
-}
+      studies = await getRepository(Studies)
+        .createQueryBuilder('studies')
+        .innerJoinAndSelect('studies.doctor', 'doctorData')
+        .innerJoinAndSelect('studies.technician', 'technicianData')
+        .innerJoinAndSelect('studies.studieType', 'sTypeData')
+        .innerJoinAndSelect('studies.machine', 'machineData')
+        .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+        .innerJoinAndSelect('studies.idPatients', 'patientsData')
+        .select(['studies',
+          'doctorData.name', 'doctorData.lastname',
+          'technicianData.name', 'technicianData.lastname',
+          'sTypeData.name', 'sTypeData.id',
+          'machineData.name',
+          'hInsuranceData.name',
+          'patientsData.name', 'patientsData.lastname',
+          'patientsData.dni'
+        ])
+        .where('studies.doctor = :id', { id })
+        .getMany();
+
+
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+
+    if (studies.length > 0) {
+      res.send({ studies });
+    } else {
+      res.status(404).json({ message: 'Not result' });
+    }
   }
 
   static getStudiesByDoctorAndTech = async (req: Request, res: Response) => {
     const { id } = req.params;
     let studies;
-    const {idTech}= req.body;
+    const { idTech } = req.body;
     try {
       studies = await getRepository(Studies)
         .createQueryBuilder('studies')
@@ -100,9 +100,9 @@ res.status(404).json({message: 'Not result'});
         .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
         .innerJoinAndSelect('studies.idPatients', 'patientsData')
         .select(['studies',
-          'doctorData.name','doctorData.lastname',
-          'technicianData.name','technicianData.lastname','technicianData.id',
-          'sTypeData.name','sTypeData.id',
+          'doctorData.name', 'doctorData.lastname',
+          'technicianData.name', 'technicianData.lastname', 'technicianData.id',
+          'sTypeData.name', 'sTypeData.id',
           'machineData.name',
           'hInsuranceData.name',
           'patientsData.name', 'patientsData.lastname',
@@ -114,46 +114,80 @@ res.status(404).json({message: 'Not result'});
         .getMany();
   
   
-  } catch (e) {
-  res.status(404).json({message: 'Somenthing goes wrong!'});
-  }
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
   
-  res.send(studies);
+    res.send(studies);
   
   }
 
-static getStudiesByPayout = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  let studies;
+  static getStudiesByPayout = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let studies;
 
-  try {
-    studies = await getRepository(Studies)
-      .createQueryBuilder('studies')
-      .innerJoinAndSelect('studies.doctor', 'doctorData')
-      .innerJoinAndSelect('studies.technician', 'technicianData')
-      .innerJoinAndSelect('studies.studieType', 'sTypeData')
-      .innerJoinAndSelect('studies.machine', 'machineData')
-      .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
-      .innerJoinAndSelect('studies.idPatients', 'patientsData')
-      .select(['studies',
-        'doctorData.name','doctorData.lastname','doctorData.lastname',
-        'technicianData.name','technicianData.lastname',
-        'sTypeData.name','sTypeData.id',
-        'machineData.name',
-        'hInsuranceData.name',
-        'patientsData.name', 'patientsData.lastname',
-        'patientsData.dni'
-      ])
-      .where('studies.payout = :id', { id })
-      .getMany();
+    try {
+      studies = await getRepository(Studies)
+        .createQueryBuilder('studies')
+        .innerJoinAndSelect('studies.doctor', 'doctorData')
+        .innerJoinAndSelect('studies.technician', 'technicianData')
+        .innerJoinAndSelect('studies.studieType', 'sTypeData')
+        .innerJoinAndSelect('studies.machine', 'machineData')
+        .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+        .innerJoinAndSelect('studies.idPatients', 'patientsData')
+        .select(['studies',
+          'doctorData.name', 'doctorData.lastname', 'doctorData.lastname',
+          'technicianData.name', 'technicianData.lastname',
+          'sTypeData.name', 'sTypeData.id',
+          'machineData.name',
+          'hInsuranceData.name',
+          'patientsData.name', 'patientsData.lastname',
+          'patientsData.dni'
+        ])
+        .where('studies.payout = :id', { id })
+        .getMany();
 
 
-} catch (e) {
-res.status(404).json({message: 'Somenthing goes wrong!'});
-}
-res.send(studies);
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+    res.send(studies);
+  }
 
-}
+  static getStudiesByDoctorToPayout = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let studies;
+    try {
+      studies = await getRepository(Studies)
+        .createQueryBuilder('studies')
+        .innerJoinAndSelect('studies.doctor', 'doctorData')
+        .innerJoinAndSelect('studies.technician', 'technicianData')
+        .innerJoinAndSelect('studies.studieType', 'sTypeData')
+        .innerJoinAndSelect('studies.machine', 'machineData')
+        .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+        .innerJoinAndSelect('studies.idPatients', 'patientsData')
+        .select(['studies',
+          'doctorData.name', 'doctorData.lastname',
+          'technicianData.name', 'technicianData.lastname', 'technicianData.id',
+          'sTypeData.name', 'sTypeData.id',
+          'machineData.name',
+          'hInsuranceData.name',
+          'patientsData.name', 'patientsData.lastname',
+          'patientsData.dni'
+        ])
+        .where('studies.doctor = :id', { id })
+        .where('studies.state=2')
+        .getMany();
+
+
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+
+    res.send(studies);
+
+  }
+
 }
 export default StudiesListController
 

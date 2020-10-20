@@ -12,7 +12,7 @@ export class Users {
 
     @Column()
     @IsEmail()
-    @MinLength(8)
+    @MinLength(4)
     @IsNotEmpty()
     username: string;
 
@@ -40,6 +40,10 @@ export class Users {
     @Column()
     @UpdateDateColumn()
     updateAT: Date;
+
+    @Column()
+    @UpdateDateColumn()
+    changePassword: boolean;
 
     hashPassword(): void{
         const salt = bcrypt.genSaltSync(10);
