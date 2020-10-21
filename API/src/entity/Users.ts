@@ -42,7 +42,6 @@ export class Users {
     updateAT: Date;
 
     @Column()
-    @UpdateDateColumn()
     changePassword: boolean;
 
     hashPassword(): void{

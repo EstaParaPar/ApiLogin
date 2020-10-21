@@ -49,7 +49,7 @@ export class UserController {
 
     try {
       users = await userRepository.find({
-        select: ['id','name','lastname'],
+        select: ['id','name','lastname','changePassword'],
         where: {
           role: 'Tecnico'
         }
@@ -86,6 +86,8 @@ export class UserController {
     user.role = role;
     user.name = name;
     user.lastname = lastname;
+    user.changePassword = true;
+
 
     // Validate
     const validationOpt = { validationError: { target: false, value: false } };
@@ -106,6 +108,7 @@ export class UserController {
     // All ok
     res.send('User created');
   };
+
 
   static edit = async (req: Request, res: Response) => {
     let user;
