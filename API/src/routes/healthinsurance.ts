@@ -6,7 +6,7 @@ import { Router } from 'express';
 const router = Router();
 
 // Get all HealthInsurance
-router.get('/',HealthInsuranceController.getAll);
+router.get('/', [checkJwt, checkRole(['Admin','Doctor','Tecnico'])],HealthInsuranceController.getAll);
 
 // Get one HealthInsurance
 

@@ -7,7 +7,7 @@ import { Router } from 'express';
 const router = Router();
 
 // Get all studies type
-router.get('/:id', StudiesListController.getStudiesByDoctorAndTech);
+router.get('/:id', [checkJwt, checkRole(['Admin','Doctor'])], StudiesListController.getStudiesByDoctorAndTech);
 
 // Get one
 

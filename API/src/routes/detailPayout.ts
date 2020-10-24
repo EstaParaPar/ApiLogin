@@ -6,7 +6,7 @@ import { Router } from 'express';
 const router = Router();
 // Get Payout By Doctor
 
-router.get('/:id', PayoutController.getDetailPayout);
+router.get('/:id', [checkJwt, checkRole(['Admin','Doctor'])], PayoutController.getDetailPayout);
 
 // Create a new payout
 

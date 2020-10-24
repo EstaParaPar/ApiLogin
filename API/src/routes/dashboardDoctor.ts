@@ -7,7 +7,7 @@ const router = Router();
 // Create a new study
 
 
-router.get('/:id',  DashboardController.getDashDoctor);
+router.get('/:id',[checkJwt, checkRole(['Admin','Doctor'])],  DashboardController.getDashDoctor);
 
 
 export default router;
