@@ -156,6 +156,22 @@ export class UserController {
     userRepository.delete(id);
     res.status(201).json({ message: ' User deleted' });
   };
+  static getPasswordState = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let changePassword;
+    const userRepository = getRepository(Users);
+    try {
+      const passwordState = await userRepository.findOne({
+        select: changePassword,
+        where: {
+          userId: id,
+        }
+     });
+      res.send(passwordState);
+    } catch (e) {
+      res.status(404).json({ message: 'Not result' });
+    }
+  };
 }
 
 export default UserController;

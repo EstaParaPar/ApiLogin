@@ -20,4 +20,5 @@ router.patch('/:id', [checkJwt, checkRole(['Admin','Doctor'])], UserController.e
 // Delete
 router.delete('/:id', [checkJwt, checkRole(['Admin','Doctor'])], UserController.delete);
 
+
 export default router;
