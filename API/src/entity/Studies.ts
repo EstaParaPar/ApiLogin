@@ -43,6 +43,10 @@ export class Studies {
     currentPrice: number;
 
     @Column()
+    @Column('double')
+    techCurrentPrice: number;
+
+    @Column()
     studyDate: Date;
 
     @Column()

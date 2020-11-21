@@ -103,10 +103,10 @@ export class UserController {
       user.hashPassword();
       await userRepository.save(user);
     } catch (e) {
-      return res.status(409).json({ message: 'Username already exist' });
+      return res.status(409).json({ message: 'Ya existe el UserName' });
     }
     // All ok
-    res.send('User created');
+    return res.status(200).json('User created');
   };
 
 

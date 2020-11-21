@@ -1,5 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, Column,  CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn
+} from 'typeorm';
 import {IsNotEmpty} from 'class-validator';
+import { GroupPrices } from './GroupPrices';
 
 @Entity()
 export class HealthInsurance {
@@ -10,6 +19,10 @@ export class HealthInsurance {
     @Column()
     @IsNotEmpty()
     name: string;
+
+    @ManyToOne(type => GroupPrices)
+    @JoinColumn()
+    groupPrice: GroupPrices;
 
     @Column()
     @CreateDateColumn()

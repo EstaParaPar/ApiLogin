@@ -17,6 +17,8 @@ import confirmPayout from './confirmedStudiesPayout';
 import dashDoctor from './dashboardDoctor';
 import detailPayout from './detailPayout';
 import studiesdoctor from './studiesdoctor';
+import groupPrice from './groupPrice';
+import priceGroupPrice from './priceGroupPrice';
 
 
 const routes = Router();
@@ -39,6 +41,8 @@ routes.use('/studiesdoctortech', studiesdoctortech );
 routes.use('/confirmedStudiesPayout', confirmPayout);
 routes.use('/detailPayout', detailPayout);
 routes.use('/studiesdoctor', studiesdoctor);
+routes.use('/groupPrice', groupPrice);
+routes.use('/priceGroupPrice', priceGroupPrice);
 
 export default routes;
 
