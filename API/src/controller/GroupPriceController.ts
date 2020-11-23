@@ -4,6 +4,7 @@ import { GroupPrices } from '../entity/GroupPrices';
 import {validate} from "class-validator";
 import {StudiesType} from "../entity/StudiesType";
 import { Prices } from '../entity/Prices';
+import {Studies} from "../entity/Studies";
 
 
 export class GroupPriceController {
@@ -57,10 +58,10 @@ export class GroupPriceController {
       const studieTypeRepository = getRepository(StudiesType);
       let studiesTypes = await studieTypeRepository.find({select: ['id', 'name']});
       const pricesRepository = getRepository(Prices);
-      for (let i=0; i<= studiesTypes.length; i++  )
+      for (let i=0; i< studiesTypes.length; i++  )
       {
         const price = new Prices();
-        price.studyTypeId = studiesTypes[i];
+        price.studyType = studiesTypes[i];
         price.groupPrice = groupPrice;
         price.techPrice =0;
         price.totalPrice =0;
@@ -76,6 +77,44 @@ export class GroupPriceController {
     res.send(groupPrice);
   };
 
+  static editGroupPrice = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    const groupPrices  = req.body;
+
+    const pricesRepository = getRepository(Prices);
+
+    console.log(groupPrices);
+    try {
+      for (let i=0; i< groupPrices.length; i++  ){
+        let price;
+        let idStudieType = groupPrices[i].id;
+        console.log(idStudieType);
+        console.log(id);
+        price = await getRepository(Prices)
+          .createQueryBuilder('prices')
+          .innerJoinAndSelect('prices.studyType', 'studyType')
+          .innerJoinAndSelect('prices.groupPrice', 'groupPrice')
+          .select(['prices','studyType.id','groupPrice.id'])
+          .where('studyType.id  = :idStudieType ', { idStudieType })
+          .where('groupPrice.id = :id', { id })
+          .getOne();
+
+
+        console.log(price);
+        price.totalPrice = groupPrices[i].totalPrice;
+        price.techPrice = groupPrices[i].techPrice;
+
+        await pricesRepository.save(price);
+
+      }
+
+    } catch (e) {
+      return res.status(409).json({ message: 'Error en actualizacion de precios' });
+    }
+
+    res.status(201).json({ message: 'Precios actualizados' });
+  };
 
 
 }

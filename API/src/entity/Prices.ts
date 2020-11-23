@@ -13,7 +13,7 @@ export class Prices {
 
     @ManyToOne(type => StudiesType)
     @JoinColumn()
-    studyTypeId: StudiesType;
+    studyType: StudiesType;
 
     @ManyToOne(type => GroupPrices)
     @JoinColumn()
