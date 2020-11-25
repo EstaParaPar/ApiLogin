@@ -3,7 +3,7 @@
   "host": "localhost",
   "port": 3306,
   "username": "root",
-  "password": "",
+  "password": "Nacional.5",
   "database": "studiespro",
   "synchronize": true,
   "logging": false,

@@ -14,6 +14,7 @@ router.get('/',[checkJwt, checkRole(['Admin','Doctor', 'Tecnico'])], StudiesType
 router.get('/:id',[checkJwt, checkRole(['Admin','Doctor', 'Tecnico'])], StudiesTypeController.getById);
 
 // Create a new studies type
+router.post('/',[checkJwt, checkRole(['Admin','Doctor'])],  StudiesTypeController.new);
 
 // Edit studies type
 // Edit user

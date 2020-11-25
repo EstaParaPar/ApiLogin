@@ -37,6 +37,7 @@ export class GroupPriceController {
     }
   };
 
+
   static new = async (req: Request, res: Response) => {
     const { name } = req.body;
     const groupPrice = new GroupPrices();
@@ -56,7 +57,8 @@ export class GroupPriceController {
       await GroupPricesRepository.save(groupPrice);
 
       const studieTypeRepository = getRepository(StudiesType);
-      let studiesTypes = await studieTypeRepository.find({select: ['id', 'name']});
+      let studiesTypes = await studieTypeRepository
+      .find({ select: ['id', 'name'] });
       const pricesRepository = getRepository(Prices);
       for (let i=0; i< studiesTypes.length; i++  )
       {
@@ -78,30 +80,18 @@ export class GroupPriceController {
   };
 
   static editGroupPrice = async (req: Request, res: Response) => {
-
-    const { id } = req.params;
     const groupPrices  = req.body;
 
     const pricesRepository = getRepository(Prices);
 
-    console.log(groupPrices);
+    //console.log(groupPrices);
     try {
       for (let i=0; i< groupPrices.length; i++  ){
-        let price;
         let idStudieType = groupPrices[i].id;
-        console.log(idStudieType);
-        console.log(id);
-        price = await getRepository(Prices)
-          .createQueryBuilder('prices')
-          .innerJoinAndSelect('prices.studyType', 'studyType')
-          .innerJoinAndSelect('prices.groupPrice', 'groupPrice')
-          .select(['prices','studyType.id','groupPrice.id'])
-          .where('studyType.id  = :idStudieType ', { idStudieType })
-          .where('groupPrice.id = :id', { id })
-          .getOne();
+
+        let price = await pricesRepository.findOneOrFail(idStudieType);
 
 
-        console.log(price);
         price.totalPrice = groupPrices[i].totalPrice;
         price.techPrice = groupPrices[i].techPrice;
 

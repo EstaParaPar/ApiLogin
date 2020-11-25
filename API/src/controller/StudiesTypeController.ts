@@ -21,6 +21,30 @@ export class StudiesTypeController {
       res.status(404).json({message: 'Not result'});
     }
   }
+  static new = async (req: Request, res: Response) => {
+    const { name } = req.body;
+    const studiesType = new StudiesType();
+    
+      studiesType.name = name;
+      studiesType.price = 0;
+
+    // Validate
+    const errors = await validate(studiesType);
+    if (errors.length > 0) {
+      return res.status(400).json(errors);
+    }
+
+    const studiesRepository = getRepository(StudiesType);
+    try {
+
+      await studiesRepository.save(studiesType);
+
+    } catch (e) {
+      return res.status(409).json({message: "No se pudo cargar tipo de estudio"});
+    }
+    // All ok
+    res.send(studiesType);
+  };
 
 
   static getById = async (req: Request, res: Response) => {

@@ -30,6 +30,28 @@ export class PriceController {
     }
   };
 
+  static getByStudie = async (req: Request, res: Response) => {
+    const {id} = req.params;
+    const PricesRepository = getRepository(Prices);
+    try {
+      const prices=  await getRepository(Prices)
+        .createQueryBuilder('prices')
+        .innerJoinAndSelect('prices.groupPrice', 'groupPrice')
+        .innerJoinAndSelect('prices.studyType', 'studyType')
+        .select(['prices','studyType.name',
+          'groupPrice.name','prices.techPrice', 'prices.totalPrice'
+        ])
+        .where('prices.studyType = :id', { id })
+        .getMany();
+        //console.log(prices)
+
+
+      res.send(prices);
+    } catch (e) {
+      res.status(404).json({message: 'Not result'});
+    }
+  };
+
 
 
 

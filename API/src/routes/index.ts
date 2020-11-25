@@ -19,7 +19,7 @@ import detailPayout from './detailPayout';
 import studiesdoctor from './studiesdoctor';
 import groupPrice from './groupPrice';
 import priceGroupPrice from './priceGroupPrice';
-
+import priceGroupStudies from './priceGroupStudies';
 
 const routes = Router();
 
@@ -43,6 +43,7 @@ routes.use('/detailPayout', detailPayout);
 routes.use('/studiesdoctor', studiesdoctor);
 routes.use('/groupPrice', groupPrice);
 routes.use('/priceGroupPrice', priceGroupPrice);
+routes.use('/priceGroupStudies', priceGroupStudies);
 
 export default routes;
 

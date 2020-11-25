@@ -15,5 +15,5 @@ router.get('/:id', PriceController.getById);
 router.patch('/:id', [checkJwt, checkRole(['Admin','Doctor'])], GroupPriceController.editGroupPrice);
 
 
-
+ 
 export default router;
