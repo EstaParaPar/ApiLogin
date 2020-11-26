@@ -2,7 +2,8 @@ import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { StudiesType } from '../entity/StudiesType';
 import {validate} from "class-validator";
-
+import { GroupPrices } from '../entity/GroupPrices';
+import { Prices } from '../entity/Prices';
 
 export class StudiesTypeController {
   static getAll = async (req: Request, res: Response) => {
@@ -33,11 +34,24 @@ export class StudiesTypeController {
     if (errors.length > 0) {
       return res.status(400).json(errors);
     }
-
     const studiesRepository = getRepository(StudiesType);
     try {
 
       await studiesRepository.save(studiesType);
+
+      const groupPricesRepository = getRepository(GroupPrices);
+      let groupPrices = await groupPricesRepository
+      .find({ select: ['id', 'name'] });
+      const pricesRepository = getRepository(Prices);
+      for (let i = 0; i < groupPrices.length; i++) {
+        const price = new Prices();
+        price.groupPrice = groupPrices[i];
+        price.studyType = studiesType;
+        price.techPrice = 0;
+        price.totalPrice = 0;
+
+        await pricesRepository.save(price);
+      }
 
     } catch (e) {
       return res.status(409).json({message: "No se pudo cargar tipo de estudio"});
