@@ -6,6 +6,8 @@ import { Patients } from '../entity/Patients';
 import { StudiesType } from '../entity/StudiesType';
 import { HealthInsurance } from '../entity/HealthInsurance';
 import { Users } from '../entity/Users';
+import {Prices} from "../entity/Prices";
+import {GroupPrices} from "../entity/GroupPrices";
 
 
 export class StudiesController {
@@ -40,6 +42,7 @@ export class StudiesController {
     let newSaveHealth;
     let idHealthInsurance;
     let idTech;
+    let prices;
 
     const patientRepository = getRepository(Patients);
     newPatients = newPatient;
@@ -72,13 +75,7 @@ export class StudiesController {
     }
     console.log(idPatients);
 
-    const StudieTypeRepository = getRepository(StudiesType)
-    let studyPrice = await StudieTypeRepository.findOne({
-      select: ['price'],
-      where: {
-        id: study
-      }
-    });
+
 
     const userRepository = getRepository(Users);
     let tech = await userRepository.findOne({
@@ -88,10 +85,11 @@ export class StudiesController {
       }
     });
     idTech = tech.id;
+    console.log(tech);
 
 
     const healthInsuranceRepository = getRepository(HealthInsurance);
-    newHealthIns = newHealth;
+   /* newHealthIns = newHealth;
     if (newHealthIns == 1) {
       healthinsurances.name = healthinsurance;
       await healthInsuranceRepository.save(healthinsurances);
@@ -103,9 +101,44 @@ export class StudiesController {
       });
       idHealthInsurance = newSaveHealth.id;
 
-    } else {
-      idHealthInsurance = healthinsurance
-    }
+    } else {*/
+
+    idHealthInsurance = healthinsurance;
+
+     //healthIns = await healthInsuranceRepository.findOneOrFail(idHealthInsurance);
+
+    let healthIns =  await getRepository(HealthInsurance)
+      .createQueryBuilder('HI')
+      .innerJoinAndSelect('HI.groupPrice', 'GP')
+      .select(['HI',
+        'GP.id'
+      ])
+      .where('HI.id = :idHealthInsurance',{idHealthInsurance})
+      .getOne();
+
+    console.log(healthIns);
+    console.log(healthIns.groupPrice.id);
+
+    let idGroupPrice = healthIns.groupPrice.id ;
+
+    prices=  await getRepository(Prices)
+      .createQueryBuilder('prices')
+      .select(['prices'])
+      .where('prices.groupPrice = :idGroupPrice', { idGroupPrice})
+      .where('prices.studyType = :study', { study })
+      .getOne();
+
+
+
+    const StudieTypeRepository = getRepository(StudiesType)
+    let studyPrice = await StudieTypeRepository.findOne({
+      select: ['price'],
+      where: {
+        id: study
+      }
+    });
+
+
 
     studysave.technician = idTech;
     studysave.doctor = doctor;
@@ -113,9 +146,13 @@ export class StudiesController {
     studysave.machine = machine;
     studysave.idPatients = idPatients;
     studysave.state = 1;
-    studysave.currentPrice = studyPrice.price;
+    studysave.currentPrice = prices.totalPrice;
+    studysave.techCurrentPrice = prices.techPrice;
     studysave.idHealthInsurance = idHealthInsurance;
     studysave.studyDate = date;
+
+
+
 
     const StudiesRepository = getRepository(Studies);
     try {

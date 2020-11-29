@@ -2,17 +2,29 @@ import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { HealthInsurance } from '../entity/HealthInsurance';
 import { validate } from 'class-validator';
+import { GroupPrices } from '../entity/GroupPrices';
 
 
 export class HealthInsuranceController {
 
 
   static getAll = async (req: Request, res: Response) => {
-    const HealthInsuranceRepository = getRepository(HealthInsurance);
+
     let healthInsurance;
 
+
+
     try {
-      healthInsurance = await HealthInsuranceRepository.find({select: ['id', 'name']});
+
+      healthInsurance =  await getRepository(HealthInsurance)
+        .createQueryBuilder('HI')
+        .innerJoinAndSelect('HI.groupPrice', 'GP')
+        .select(['HI',
+          'GP.name'
+        ])
+        .getMany();
+
+     // healthInsurance = await HealthInsuranceRepository.find({select: ['id', 'name']});
     } catch (e) {
       res.status(404).json({message: 'Somenthing goes wrong!'});
     }
@@ -25,10 +37,16 @@ export class HealthInsuranceController {
   }
 
   static new = async (req: Request, res: Response) => {
-    const { name } = req.body;
+    const { name, gpId } = req.body;
     const healthInsurance = new HealthInsurance();
 
     healthInsurance.name = name;
+
+
+
+    const groupPriceRepository = getRepository(GroupPrices);
+
+
 
 
     // Validate
@@ -42,6 +60,11 @@ export class HealthInsuranceController {
 
     const healthInsuranceRepository = getRepository(HealthInsurance);
     try {
+
+      const groupPrice = await groupPriceRepository.findOneOrFail(gpId);
+
+      healthInsurance.groupPrice = groupPrice;
+
       await healthInsuranceRepository.save(healthInsurance);
     } catch (e) {
       return res.status(409).json({ message: 'Prepaga/O.social  already exist' });
