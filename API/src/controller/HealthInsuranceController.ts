@@ -72,7 +72,57 @@ export class HealthInsuranceController {
     // All ok
     res.send('Prepaga/O.social created');
   };
+
+  static getById = async (req: Request, res: Response) => {
+    const {id} = req.params;
+    let healthIns;
+    try {
+      healthIns = await getRepository(HealthInsurance)
+        .createQueryBuilder('healthIns')
+        .innerJoinAndSelect('healthIns.groupPrice', 'gp')
+        .select(['healthIns', 'gp.name'])
+        .where('healthIns.id = :id', { id })
+        .getOne();
+      res.send(healthIns);
+    } catch (e) {
+      res.status(404).json({message: 'Not result'});
+    }
+  };
+
+  static editHealthIns = async (req: Request, res: Response) => {
+    const { name, gpId } = req.body;
+    const { id } = req.params;
+    let healthIns;
+
+    const healthInsuranceRepository = getRepository(HealthInsurance);
+
+    try {
+      healthIns = await healthInsuranceRepository.findOneOrFail(id);
+      healthIns.name = name;
+      healthIns.groupPrice = gpId;
+
+      console.log(healthIns);
+    } catch (e) {
+      return res.status(404).json({ message: 'Obra social no encontrada' });
+    }
+    const validationOpt = { validationError: { target: false, value: false } };
+    const errors = await validate(healthIns, validationOpt);
+
+    if (errors.length > 0) {
+      return res.status(400).json(errors);
+    }
+
+    // Try to save user
+    try {
+      await healthInsuranceRepository.save(healthIns);
+    } catch (e) {
+      return res.status(409).json({ message: 'error en la actualizacion' });
+    }
+
+    res.status(201).json({ message: 'Obra social actualizada' });
+  };
 }
+
 
 
 export default HealthInsuranceController;
