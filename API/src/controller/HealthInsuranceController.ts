@@ -80,7 +80,7 @@ export class HealthInsuranceController {
       healthIns = await getRepository(HealthInsurance)
         .createQueryBuilder('healthIns')
         .innerJoinAndSelect('healthIns.groupPrice', 'gp')
-        .select(['healthIns', 'gp.name'])
+        .select(['healthIns', 'gp.name', 'gp.id'])
         .where('healthIns.id = :id', { id })
         .getOne();
       res.send(healthIns);
