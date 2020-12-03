@@ -87,48 +87,96 @@ export class PayoutController {
     const { id } = req.params;
     let payout;
     let studies;
+    let healthIns;
+    let detailPayOut =new Array();
 
     try {
+      healthIns = await getRepository(HealthInsurance)
+        .createQueryBuilder('HI')
+        .select(['HI'])
+        .getMany();
+
+
+
       payout = await getRepository(PayOut)
-      .createQueryBuilder('payout')
-      .innerJoinAndSelect('payout.doctor', 'doctorData')
-      .innerJoinAndSelect('payout.technician', 'technicianData')
-      .select(['payout',
-        'doctorData.name', 'doctorData.lastname','doctorData.id',
-        'technicianData.name', 'technicianData.lastname','technicianData.id',
-        'payout.totalPrice'
-      ])
-      .where('payout.id = :id', { id })
+        .createQueryBuilder('payout')
+        .innerJoinAndSelect('payout.doctor', 'doctorData')
+        .innerJoinAndSelect('payout.technician', 'technicianData')
+        .select(['payout',
+          'doctorData.name', 'doctorData.lastname','doctorData.id',
+          'technicianData.name', 'technicianData.lastname','technicianData.id',
+          'payout.totalPrice'
+        ])
+        .where('payout.id = :id', { id })
         .getOne();
 
-      studies = await getRepository(Studies)
-      .createQueryBuilder('studies')
-      .innerJoinAndSelect('studies.doctor', 'doctorData')
-      .innerJoinAndSelect('studies.technician', 'technicianData')
-      .innerJoinAndSelect('studies.studieType', 'sTypeData')
-      .innerJoinAndSelect('studies.machine', 'machineData')
-      .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
-      .innerJoinAndSelect('studies.idPatients', 'patientsData')
-      .select(['studies',
-        'doctorData.name','doctorData.lastname',
-        'technicianData.name','technicianData.lastname',
-        'sTypeData.name','sTypeData.id',
-        'machineData.name',
-        'hInsuranceData.name',
-        'patientsData.name', 'patientsData.lastname',
-        'patientsData.dni'
-      ])
-      .where('studies.payOutId = :id', { id })
-      .getMany();
-      
+      for (let i=0; i<healthIns.length; i++){
+        let idHealthIns = healthIns[i].id;
+        console.log("-----------------------------------");
+        console.log(healthIns[i].name);
+        console.log(idHealthIns);
+        console.log(id);
 
-      
+        let studies_health = await getRepository(Studies)
+          .createQueryBuilder('studies')
+          .innerJoinAndSelect('studies.doctor', 'doctorData')
+          .innerJoinAndSelect('studies.technician', 'technicianData')
+          .innerJoinAndSelect('studies.studieType', 'sTypeData')
+          .innerJoinAndSelect('studies.machine', 'machineData')
+          .innerJoinAndSelect('studies.idHealthInsurance', 'hInsuranceData')
+          .innerJoinAndSelect('studies.idPatients', 'patientsData')
+          .select(['studies',
+            'doctorData.name','doctorData.lastname',
+            'technicianData.name','technicianData.lastname',
+            'sTypeData.name','sTypeData.id',
+            'machineData.name',
+            'hInsuranceData.name',
+            'patientsData.name', 'patientsData.lastname',
+            'patientsData.dni'
+          ])
+          .where('studies.payOutId = :id', { id })
+          .andWhere('studies.idHealthInsuranceId = :idHealthIns', { idHealthIns })
+          .getMany();
+
+
+       console.log(studies_health);
+        let monto_os = 0;
+        let monto_os_tech = 0;
+        if (studies_health.length)
+        {
+          for (let j=0; j<studies_health.length; j++){
+            monto_os = monto_os + studies_health[j].currentPrice;
+            monto_os_tech = monto_os_tech + studies_health[j].techCurrentPrice;
+
+          }
+        }
+
+
+
+        let oneHealthIns ={
+          obraSocial : healthIns[i],
+          studies : studies_health,
+          precio_os: monto_os,
+          precio_tech: monto_os_tech
+        };
+
+
+        detailPayOut.push(oneHealthIns);
+      }
+
+      console.log(detailPayOut);
+
+
+
+
+      res.send({ payout, detailPayOut});
+
+
     } catch (e) {
       res.status(404).json({ message: 'Somenthing goes wrong!' });
     }
             
-    res.send({ payout, studies });
-    
+
           
   };
 
