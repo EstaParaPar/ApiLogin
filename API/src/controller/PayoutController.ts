@@ -175,10 +175,39 @@ export class PayoutController {
     } catch (e) {
       res.status(404).json({ message: 'Somenthing goes wrong!' });
     }
-            
 
-          
+
+
   };
+
+  static getListPayoutByTech = async (req: Request, res: Response) => {
+    console.log(req.params);
+    const { id } = req.params;
+    let payout;
+    try {
+      payout = await getRepository(PayOut)
+        .createQueryBuilder('payout')
+        .innerJoinAndSelect('payout.doctor', 'doctorData')
+        .innerJoinAndSelect('payout.technician', 'technicianData')
+        .select(['payout',
+          'doctorData.name', 'doctorData.lastname','doctorData.lastname',
+          'payout.createAT',
+          'technicianData.name', 'technicianData.lastname','technicianData.id',
+          'payout.totalPrice'
+        ])
+        .where('payout.technician = :id', { id })
+        .getMany();
+
+
+    } catch (e) {
+      res.status(404).json({ message: 'Somenthing goes wrong!' });
+    }
+
+    res.send(payout);
+
+
+  };
+
 
 } 
 
