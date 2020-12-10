@@ -12,14 +12,14 @@ export class PayoutController {
 
     static new = async (req: Request, res: Response) => {
         console.log(req.body);
-        const {studyId, payoutPrice, payoutTechId, payoutDoctorId} = req.body;
+        const {studyId,payoutPriceTech, payoutPrice, payoutTechId, payoutDoctorId} = req.body;
         const payoutsave = new PayOut();
 
         let idStudy = studyId;
         let doctorId = payoutDoctorId;
         let idTech = payoutTechId;
         let Total = payoutPrice;
-        
+        let totalTech = payoutPriceTech;
 /*const StudiesRepository = getRepository(Studies)
         let studie = await StudiesRepository.findOne({
           select: ['id'],
@@ -31,6 +31,7 @@ export class PayoutController {
         payoutsave.technician = idTech;
         payoutsave.doctor = doctorId;
         payoutsave.totalPrice = Total;
+        payoutsave.totalPriceTech = totalTech;
 
 
         const PayoutRepository = getRepository(PayOut);

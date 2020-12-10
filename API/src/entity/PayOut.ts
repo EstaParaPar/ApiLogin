@@ -27,4 +27,8 @@ export class PayOut {
     @Column('double')
     totalPrice: Number;
 
+    @Column()
+    @Column('double')
+    totalPriceTech: Number;
+
 }
