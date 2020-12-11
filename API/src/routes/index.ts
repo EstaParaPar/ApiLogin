@@ -21,6 +21,7 @@ import studiesdoctor from './studiesdoctor';
 import groupPrice from './groupPrice';
 import priceGroupPrice from './priceGroupPrice';
 import priceGroupStudies from './priceGroupStudies';
+import configHealth from './configHealth';
 
 const routes = Router();
 
@@ -46,6 +47,7 @@ routes.use('/studiesdoctor', studiesdoctor);
 routes.use('/groupPrice', groupPrice);
 routes.use('/priceGroupPrice', priceGroupPrice);
 routes.use('/priceGroupStudies', priceGroupStudies);
+routes.use('/configHealth', configHealth);
 
 export default routes;
 
